@@ -97,6 +97,7 @@ public class Game implements GameState{
 	    		setStatus(GameStatus.GAME_OVER);
 	    		setLastLog(log);
 	    		actualHero.setLifeLevel(5);
+	    		actualHero.setAttackLevel(5);
 	    	}
 	    }
 	    else {

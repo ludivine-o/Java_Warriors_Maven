@@ -36,7 +36,7 @@ public class Warriors implements WarriorsAPI {
 		mapsList.add(new Board("TheShire", 12));
 		mapsList.add(new Board());
 		
-		if (debugMode == DebugState.DEBUG_ON) {	
+		if (debugMode == DebugState.DEBUG_OFF) {	
 			currentDice = new DebugDice(filePath);
 		}
 		else {

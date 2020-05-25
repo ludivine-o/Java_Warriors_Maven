@@ -3,6 +3,7 @@ package Campus_Ludivine.Maven_Dnd;
 
 import java.util.Scanner;
 
+import bdd.Connect;
 import debug.DebugState;
 import warriors.contracts.GameState;
 import warriors.contracts.GameStatus;
@@ -20,9 +21,10 @@ public class ClientConsole {
 	
 	
 	public static void main(String[] args) {
+		
 		String debugFilePath = args[1];
 		System.out.println(debugFilePath);
-		WarriorsAPI warriors = new Warriors(DebugState.DEBUG_ON, debugFilePath);
+		WarriorsAPI warriors = new Warriors(DebugState.DEBUG_OFF, debugFilePath);
 		Scanner sc = new Scanner(System.in);
 		String menuChoice = "";
 		do {
@@ -37,12 +39,7 @@ public class ClientConsole {
 
 	private static void startGame(WarriorsAPI warriors, Scanner sc) {
 		
-//		System.out.println("Voulez-vous lancer le mode DebugMode : O/N"); 
-//		String debugChoice = sc.nextLine(); 
-//		if (debugChoice.equals("O")) {
-//			((Warriors)warriors).setDebugMode(true);
-//		}
-				
+		
 		System.out.println();
 		System.out.println("Entrez votre nom:");
 		String playerName = sc.nextLine();
