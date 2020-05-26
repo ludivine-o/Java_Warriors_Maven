@@ -1,15 +1,22 @@
 package Campus_Ludivine.Maven_Dnd;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import bdd.Connect;
+import bdd.DAO;
+import bdd.GameDAO;
+import bdd.HeroDAO;
 import debug.DebugState;
+import warriors.contracts.Game;
 import warriors.contracts.GameState;
 import warriors.contracts.GameStatus;
 import warriors.contracts.Hero;
 import warriors.contracts.Map;
 import warriors.contracts.WarriorsAPI;
+import warriors.engine.HeroCharacter;
 import warriors.engine.Warriors;
 
 
@@ -44,14 +51,27 @@ public class ClientConsole {
 		System.out.println("Entrez votre nom:");
 		String playerName = sc.nextLine();
 		
-		System.out.println("Choisissez votre héro:");
-		for(int i = 0; i < warriors.getHeroes().size(); i++) {
-			Hero heroe = warriors.getHeroes().get(i);
-			System.out.println(i+1 + " - " + heroe.getName());
-			System.out.println("    Force d'attaque : " + heroe.getAttackLevel());
-			System.out.println("    Niveau de vie : " + heroe.getLife());
-		}
-		Hero chosenHeroe = warriors.getHeroes().get(Integer.parseInt(sc.nextLine()) - 1);
+		System.out.println("Choisissez votre héro avec son identifiant:");
+		// TODO : afficher la liste des hero enregistres dans la BDD et pouvoir choisir
+		
+		List<HeroCharacter> heroesList = new ArrayList<HeroCharacter>();
+			
+		DAO<HeroCharacter> myHeroDAO = new HeroDAO(Connect.getInstance());
+		heroesList = myHeroDAO.findAll();
+		for (int i=1;i<heroesList.size();i++)
+			System.out.println("id : "+i+" - "+heroesList.get(i));
+		
+		int playerIDChoice = sc.nextInt();
+		sc.nextLine();
+		Hero chosenHeroe = myHeroDAO.find(playerIDChoice);
+		
+//		for(int i = 0; i < warriors.getHeroes().size(); i++) {
+//			Hero heroe = warriors.getHeroes().get(i);
+//			System.out.println(i+1 + " - " + heroe.getName());
+//			System.out.println("    Force d'attaque : " + heroe.getAttackLevel());
+//			System.out.println("    Niveau de vie : " + heroe.getLife());
+//		}
+//		Hero chosenHeroe = warriors.getHeroes().get(Integer.parseInt(sc.nextLine()) - 1);
 		
 		System.out.println("Choisissez votre map:");
 		for(int i = 0; i < warriors.getMaps().size(); i++) {
@@ -62,12 +82,14 @@ public class ClientConsole {
 
 		GameState gameState = warriors.createGame(playerName, chosenHeroe, choosenMap);
 		String gameId = gameState.getGameId();
+		
 		while (gameState.getGameStatus() == GameStatus.IN_PROGRESS) {
 			System.out.println(gameState.getLastLog());
 			System.out.println("\nAppuyer sur une touche pour lancer le dé"); 
 			if(sc.hasNext()) {
 				sc.nextLine();
 				gameState = warriors.nextTurn(gameId);
+				
 			}									
 		}
 		System.out.println(gameState.getLastLog());

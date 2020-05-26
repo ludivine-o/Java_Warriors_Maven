@@ -3,6 +3,8 @@ package warriors.contracts;
 import boxes_maps.BoxMap;
 import boxes_maps.EnnemyBoxMap;
 import warriors.engine.HeroCharacter;
+import warriors.engine.WarriorHero;
+import warriors.engine.WizzardHero;
 import boxes_maps.Board;
 
 public class Game implements GameState{
@@ -22,6 +24,38 @@ public class Game implements GameState{
 		gameID = ID;
 		status = GameStatus.IN_PROGRESS;
 		currentCase = 1;
+	}
+	
+	//Construct pour BDD
+	public Game(String ID, String name, String heroName, String heroType, int heroLifeLevel, int heroAttackLevel, int currentCase) {
+		playerName = name;
+		actualMap = new Board();
+		gameID = ID;
+		status = GameStatus.IN_PROGRESS;
+		this.currentCase = currentCase;
+		if (heroType.equals("Magicien")) {
+			actualHero = new WizzardHero(heroName, heroLifeLevel, heroAttackLevel);
+		}
+		else if (heroType.equals("Guerrier")) {
+			actualHero = new WarriorHero(heroName, heroLifeLevel, heroAttackLevel);
+		}
+	}
+	
+	
+	public Game() {
+	}
+	
+
+	public String getHeroType() {
+		return this.actualHero.getType();
+	}
+	
+	public int getHeroLife() {
+		return this.actualHero.getLife();
+	}
+	
+	public int getHeroAttack() {
+		return this.actualHero.getAttackLevel();
 	}
 	
 	@Override

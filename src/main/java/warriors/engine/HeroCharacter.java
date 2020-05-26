@@ -4,15 +4,38 @@ import ennemy.Enemy;
 import stuff.Stuff;
 import warriors.contracts.Hero;
 
-public abstract  class HeroCharacter implements Hero{
+public class HeroCharacter implements Hero{
 
 	protected String name;
 	protected String image;
+	
+	protected int id;
+	protected String type;
 	protected int lifeLevel;
 	protected int attackLevel;
 	protected Stuff stuff;
 	
+	public HeroCharacter(int id, String type, String nom, String image,
+			int niveauDeVie, int niveaudAttaque,
+			String equipementAttaque, String equipementDefense) {
+		super();
+		this.id = id;
+		this.name = nom;
+		this.image = image;
+		this.lifeLevel = niveauDeVie;
+		this.attackLevel = niveaudAttaque;
+		this.type = type;
+
+	}
+
 	
+	public HeroCharacter() {
+		super();
+		this.name = null;
+		this.image = null;
+		this.lifeLevel = 0;
+		this.attackLevel = 0;
+	}
 	
 	public HeroCharacter(String name, String image) {
 		super();
@@ -20,6 +43,18 @@ public abstract  class HeroCharacter implements Hero{
 		this.image = image;
 		this.lifeLevel = 5;
 		this.attackLevel = 5;
+	}
+	
+	public String toString() {
+		return "Je suis "+this.name+", un grand "+this.type;
+	}
+
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override
@@ -42,7 +77,10 @@ public abstract  class HeroCharacter implements Hero{
 		return attackLevel;
 	}
 
-	public abstract int getStuffValue();
+	public int getStuffValue() {
+		return 0;
+		
+	};
 	
 	public void setLifeLevel(int newValue) {
 		this.lifeLevel = newValue;
