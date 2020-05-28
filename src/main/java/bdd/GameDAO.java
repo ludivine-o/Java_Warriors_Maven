@@ -8,20 +8,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import boxes_maps.Board;
+
 import warriors.contracts.Game;
-import warriors.engine.HeroCharacter;
+
 
 public class GameDAO extends DAO<Game>{
 
+	
 	public GameDAO(Connection conn) {
 		super(conn);
 	}
 
 	@Override
 	public boolean create(Game obj) {
-
-		//Game(String ID, String name, String heroName, String heroType, int heroLifeLevel, int heroAttackLevel, int currentCase)
 		try {
 			SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 			Date date = new Date(System.currentTimeMillis());
@@ -37,7 +36,6 @@ public class GameDAO extends DAO<Game>{
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 			.executeUpdate("INSERT INTO Game (Id, Name, HeroName, HeroType, HeroLifeLevel, HeroAttackLevel, CurrentCase) "
 					+ "VALUES ('"+id+"', '"+gameName+"', '"+heroName+"', '"+heroType+"', '"+heroLifeLevel+"', '"+heroAttackLevel+"' , '"+currentCase+"');");
-			//this.findAll();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -45,13 +43,16 @@ public class GameDAO extends DAO<Game>{
 		}
 	}
 
-
-
-
 	@Override
 	public boolean delete(Game obj) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+			.executeUpdate("DELETE FROM Game WHERE `Id`='"+obj.getGameId()+"';");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class GameDAO extends DAO<Game>{
 			this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 			.executeUpdate("UPDATE Game SET `HeroName`= '"+obj.getPlayerName() +"',`CurrentCase`="+obj.getCurrentCase()
 			+",`HeroType`= '"+obj.getHeroType() +"',`HeroAttackLevel`= "+obj.getHeroAttack() +",`HeroLifeLevel`="+obj.getHeroLife() 
-			+" WHERE `id`='"+obj.getGameId()+"';");
+			+" WHERE `Id`='"+obj.getGameId()+"';");
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -74,10 +75,10 @@ public class GameDAO extends DAO<Game>{
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM Game WHERE Id = " + id);
+					.executeQuery("SELECT * FROM Game WHERE IdNumber = " + id);
 			if (result.first()) {
-				myGame = new Game(result.getString("IdGame"), "savedLoadMap", result.getString("HeroName"), 
-						result.getString("HeroType"), result.getInt("HeroLife"), result.getInt("HeroAttack"), result.getInt("CurrentCase"));
+				myGame = new Game(result.getInt("IdNumber"),result.getString("Id"), "savedLoadMap", result.getString("HeroName"), 
+						result.getString("HeroType"), result.getInt("HeroLifeLevel"), result.getInt("HeroAttackLevel"), result.getInt("CurrentCase"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -90,11 +91,11 @@ public class GameDAO extends DAO<Game>{
 	public List<Game> findAll() {
 		List<Game> myGames = new ArrayList<Game>();
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Hero");
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Game");
 			//int i = 0;
 			while(result.next()) {
-				myGames.add(new Game(result.getString("IdGame"), "savedLoadMap", result.getString("HeroName"), 
-						result.getString("HeroType"), result.getInt("HeroLife"), result.getInt("HeroAttack"), result.getInt("CurrentCase")));
+				myGames.add(new Game(result.getInt("IdNumber"), result.getString("Id"), "savedLoadMap", result.getString("HeroName"), 
+						result.getString("HeroType"), result.getInt("HeroLifeLevel"), result.getInt("HeroAttackLevel"), result.getInt("CurrentCase")));
 			}
 			result.close();
 		} 
@@ -102,7 +103,6 @@ public class GameDAO extends DAO<Game>{
 			e.printStackTrace();
 		}
 		return myGames;
-		// https://www.jtips.info/Tutoriel_Java
 	}
 
 }

@@ -16,6 +16,7 @@ public class Game implements GameState{
 	protected Board actualMap;
 	protected String lastLog = "la partie est en cours ";
 	protected int currentCase;
+	protected int number;
 		
 	public Game(String name, HeroCharacter hero, Board map, String ID) {
 		playerName = name;
@@ -27,7 +28,8 @@ public class Game implements GameState{
 	}
 	
 	//Construct pour BDD
-	public Game(String ID, String name, String heroName, String heroType, int heroLifeLevel, int heroAttackLevel, int currentCase) {
+	public Game(int idNumber, String ID, String name, String heroName, String heroType, int heroLifeLevel, int heroAttackLevel, int currentCase) {
+		number = idNumber;
 		playerName = name;
 		actualMap = new Board();
 		gameID = ID;
@@ -45,6 +47,9 @@ public class Game implements GameState{
 	public Game() {
 	}
 	
+	public String toString() {
+		return "Partie sauvegardée le : "+this.gameID;
+	}
 
 	public String getHeroType() {
 		return this.actualHero.getType();
@@ -66,6 +71,11 @@ public class Game implements GameState{
 	@Override
 	public String getGameId() {
 		return this.gameID;
+	}
+	
+
+	public int DAOgetGameIdNumber() {
+		return this.number;
 	}
 
 	@Override
