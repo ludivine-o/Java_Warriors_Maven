@@ -11,6 +11,16 @@ public class WizzardHero extends HeroCharacter {
 	public WizzardHero(String name, String image, String stuffname, int stuffValue) {
 		super(name, image);
 		this.stuff = new WizardStuff(stuffname, stuffValue);
+		this.type = "Magicien";
+	}
+	
+	//Construct pour BDD
+	public WizzardHero(String name, int lifeValue, int attackValue) {
+		super(name, "Url de base");
+		this.stuff = new WizardStuff("Sort de base", 5);
+		this.type = "Magicien";
+		this.setAttackLevel(attackValue);
+		this.setLifeLevel(lifeValue);
 	}
 
 	@Override
